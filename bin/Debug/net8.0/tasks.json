@@ -1,0 +1,14 @@
+[
+  {
+    "Title": "Shopping in Konzum",
+    "Description": "Buying expensive stuff",
+    "DueDate": "2024-07-30T00:00:00",
+    "Priority": "Low"
+  },
+  {
+    "Title": "Walking to the office",
+    "Description": "Picking up something",
+    "DueDate": "2024-08-01T00:00:00",
+    "Priority": "High"
+  }
+]

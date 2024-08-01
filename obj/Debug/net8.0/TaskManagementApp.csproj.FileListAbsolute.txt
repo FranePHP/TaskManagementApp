@@ -1,0 +1,14 @@
+C:\Users\Frane\source\repos\TaskManagementApp\bin\Debug\net8.0\TaskManagementApp.exe
+C:\Users\Frane\source\repos\TaskManagementApp\bin\Debug\net8.0\TaskManagementApp.deps.json
+C:\Users\Frane\source\repos\TaskManagementApp\bin\Debug\net8.0\TaskManagementApp.runtimeconfig.json
+C:\Users\Frane\source\repos\TaskManagementApp\bin\Debug\net8.0\TaskManagementApp.dll
+C:\Users\Frane\source\repos\TaskManagementApp\bin\Debug\net8.0\TaskManagementApp.pdb
+C:\Users\Frane\source\repos\TaskManagementApp\obj\Debug\net8.0\TaskManagementApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Frane\source\repos\TaskManagementApp\obj\Debug\net8.0\TaskManagementApp.AssemblyInfoInputs.cache
+C:\Users\Frane\source\repos\TaskManagementApp\obj\Debug\net8.0\TaskManagementApp.AssemblyInfo.cs
+C:\Users\Frane\source\repos\TaskManagementApp\obj\Debug\net8.0\TaskManagementApp.csproj.CoreCompileInputs.cache
+C:\Users\Frane\source\repos\TaskManagementApp\obj\Debug\net8.0\TaskManagementApp.dll
+C:\Users\Frane\source\repos\TaskManagementApp\obj\Debug\net8.0\refint\TaskManagementApp.dll
+C:\Users\Frane\source\repos\TaskManagementApp\obj\Debug\net8.0\TaskManagementApp.pdb
+C:\Users\Frane\source\repos\TaskManagementApp\obj\Debug\net8.0\TaskManagementApp.genruntimeconfig.cache
+C:\Users\Frane\source\repos\TaskManagementApp\obj\Debug\net8.0\ref\TaskManagementApp.dll
