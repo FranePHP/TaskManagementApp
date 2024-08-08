@@ -12,8 +12,9 @@ namespace TaskManagementApp
         static readonly string filePath = "tasks.json";
         static void Main()
         {
-            LoadTasks(); // Load Tasks from the JSON file at the start of the program
+            LoadTasks(); // Load Tasks from the JSON file at the start of the application
 
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             bool running = true;
 
             while (running)
@@ -26,7 +27,7 @@ namespace TaskManagementApp
                 Console.WriteLine("5. Exit");
 
                 Console.WriteLine("Choose an option: ");
-                string choice = Console.ReadLine();
+                string? choice = Console.ReadLine();
 
                 switch (choice)
                 {
@@ -42,8 +43,7 @@ namespace TaskManagementApp
                     case "4":
                         DeleteTask();
                         break;
-                    case "5":
-                        SaveTasks(); // Save Tasks to the JSON file before exiting
+                    case "5":                        
                         running = false;
                         break;
                     default:
@@ -52,7 +52,15 @@ namespace TaskManagementApp
                 }
 
             }
+            SaveTasks(); // Save Tasks to the JSON file before exiting
         }
+
+        static void OnProcessExit(object? sender, EventArgs e)
+        {
+            SaveTasks(); // Save Tasks when the application is exiting
+        }
+
+
         // Save Tasks to a JSON file
         static void SaveTasks()
         {
@@ -61,9 +69,17 @@ namespace TaskManagementApp
                 string json = JsonSerializer.Serialize(tasks, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(filePath, json);
             }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine($"Error: Access to the path '{filePath}' is denied. {ex.Message}");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"Error: An I/O error occured while writing the file. {ex.Message}");
+            }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred while saving tasks: {ex.Message}");
+                Console.WriteLine($"An unexpected error occurred while saving tasks: {ex.Message}");
             }
         }
 
@@ -75,17 +91,41 @@ namespace TaskManagementApp
                 try
                 {
                     string json = File.ReadAllText(filePath);
-                    tasks = JsonSerializer.Deserialize<List<Task>>(json);
+                    List<Task>? loadedTasks = JsonSerializer.Deserialize<List<Task>>(json);
+                    if (loadedTasks != null)
+                    {
+                        tasks = loadedTasks;
+                    }
+                    else
+                    {
+                        tasks = new List<Task>();
+                    }
+                }
+                catch (FileNotFoundException ex)
+                {
+                    Console.WriteLine($"Error: The file '{filePath}' was not found. {ex.Message}");
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    Console.WriteLine($"Error: Access to the path '{filePath}' is denied. {ex.Message}");
+                }
+                catch (JsonException ex)
+                {
+                    Console.WriteLine($"Error: The file '{filePath}' contains invalid JSON. {ex.Message}");
+                }
+                catch (IOException ex)
+                {
+                    Console.WriteLine($"Error: An I/O error occured while reading the file. {ex.Message}");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"An error occured while loading tasks: {ex.Message}");
+                    Console.WriteLine($"An unexpected error occured while loading tasks: {ex.Message}");
                 }
             }
         }
         static void AddTask()
         {
-            string title;
+            string? title;
             while (true)
             {
                 Console.Write("Enter task title: ");
@@ -97,7 +137,7 @@ namespace TaskManagementApp
                 Console.WriteLine("Title cannot be empty.");
             }
 
-            string description;
+            string? description;
             while (true)
             {
                 Console.Write("Enter task description: ");
@@ -113,7 +153,7 @@ namespace TaskManagementApp
             while (true)
             {
                 Console.Write("Enter task due date (yyyy-mm-dd): ");
-                string dueDateInput = Console.ReadLine();
+                string? dueDateInput = Console.ReadLine();
                 if (DateTime.TryParse(dueDateInput, out dueDate))
                 {
                     break;
@@ -124,7 +164,7 @@ namespace TaskManagementApp
                 }
             }
 
-            string priority;
+            string? priority;
             while (true)
             {
                 Console.Write("Enter task priority (Low, Medium, High): ");
@@ -169,7 +209,7 @@ namespace TaskManagementApp
             while (true)
             {
                 Console.Write("Enter task number to edit: ");
-                string input = Console.ReadLine();
+                string? input = Console.ReadLine();
 
                 if (!string.IsNullOrEmpty(input) && int.TryParse(input, out taskNumber) && taskNumber >= 1 && taskNumber <= tasks.Count)
                 {
@@ -181,14 +221,14 @@ namespace TaskManagementApp
             Task task = tasks[taskNumber - 1];              
 
             Console.Write("Enter new title (leave blank to keep current): ");
-            string newTitle = Console.ReadLine();
+            string? newTitle = Console.ReadLine();
             if (!string.IsNullOrEmpty(newTitle))
             {
                 task.Title = newTitle;
             }
 
             Console.Write("Enter new description (leave blank to keep current):");
-            string newDescription = Console.ReadLine();
+            string? newDescription = Console.ReadLine();
             if (!string.IsNullOrEmpty(newDescription))
             {
                 task.Description = newDescription;
@@ -197,7 +237,7 @@ namespace TaskManagementApp
             while (true)
             {
                 Console.Write("Enter new due date (leave blank to keep current):");
-                string newDueDate = Console.ReadLine();
+                string? newDueDate = Console.ReadLine();
                 if (string.IsNullOrEmpty(newDueDate))
                 {
                     break;
@@ -217,7 +257,7 @@ namespace TaskManagementApp
             while (true)
             {
                 Console.Write("Enter new priority (leave blank to keep current):");
-                string newPriority = Console.ReadLine();
+                string? newPriority = Console.ReadLine();
                 if (string.IsNullOrEmpty(newPriority))
                 {
                     break;
@@ -248,7 +288,7 @@ namespace TaskManagementApp
             while (true)
             {
                 Console.WriteLine("Enter task number to delete: ");
-                string input = Console.ReadLine();
+                string? input = Console.ReadLine();
 
                 if (!string.IsNullOrEmpty(input) && int.TryParse(input, out taskNumber) && taskNumber >= 1 && taskNumber <= tasks.Count)
                 {
